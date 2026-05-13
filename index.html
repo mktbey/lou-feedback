@@ -417,23 +417,27 @@ a { color: var(--bey-blue); text-decoration: none; }
 }
 .tv-bullets { list-style: none; margin-bottom: 20px; }
 .tv-bullets li {
-  font-size: 13px; color: var(--text-body);
-  padding-left: 22px; position: relative;
-  margin-bottom: 6px; line-height: 1.5;
-}
-.tv-bullets li::before {
-  content: ""; position: absolute; left: 0; top: 9px;
-  width: 8px; height: 8px;
-  background: var(--bey-yellow); border-radius: 2px;
+  font-size: 13.5px; color: var(--text-body);
+  margin-bottom: 8px; line-height: 1.55;
 }
 .tv-cta {
   background: var(--bey-light-50);
   margin: 16px -36px -36px;
-  padding: 14px 36px;
-  font-size: 12px; font-weight: 700;
-  color: var(--bey-navy);
+  padding: 16px 36px 18px;
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
+}
+.tv-cta .info {
+  font-size: 12px;
+  color: var(--text-body);
+  margin-bottom: 4px;
+  line-height: 1.45;
+}
+.tv-cta .action {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bey-navy);
+  line-height: 1.45;
 }
 .tv-foot {
   display: flex; justify-content: flex-end;
@@ -1146,14 +1150,17 @@ a { color: var(--bey-blue); text-decoration: none; }
       </div>
       <div class="tv-headline">«Endlich Platz für die ganze Familie, mitten in Luzern.»</div>
       <p class="tv-body">Im LOU an der Tribschenstrasse entstehen grosszügige Mietwohnungen mit 3.5 und 4.5 Zimmern, durchdachten Grundrissen, hochwertiger Ausstattung und privater Loggia oder Terrasse.</p>
-      <ul class="tv-bullets"><li>Bis zu 4.5 Zimmer mit offenem Wohnraum</li><li>10 Minuten zum Vierwaldstättersee</li><li>Quooker in jeder Küche</li><li>Coop direkt im Haus</li></ul>
+      <ul class="tv-bullets"><li>🏡 Bis zu 4.5 Zimmer mit offenem Wohnraum und Essbereich</li><li>🌊 10 Minuten zum Vierwaldstättersee</li><li>🍳 Quooker in jeder Küche, heisses und sprudelndes Wasser auf Knopfdruck</li><li>🛒 Coop direkt im Haus</li><li>🚆 In wenigen Minuten am Bahnhof Luzern</li></ul>
       <div class="tv-foot"><button class="cmt-btn" data-id="text_v1">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
       </svg>
       <span>Kommentar</span><span class="badge">0</span>
     </button></div>
-      <div class="tv-cta">Bezug ab 1. Juli 2026 · Jetzt vormerken</div>
+      <div class="tv-cta">
+        <div class="info">Bezug ab 1. Juli 2026.</div>
+        <div class="action">👉 Jetzt vormerken und Mietvertrag online abschliessen.</div>
+      </div>
     </div>
 <div class="tv-card">
       <div class="tv-head">
@@ -1162,30 +1169,36 @@ a { color: var(--bey-blue); text-decoration: none; }
       </div>
       <div class="tv-headline">«Mehr Raum. Mehr Komfort. Mehr Luzern.»</div>
       <p class="tv-body">Die grosszügigen Wohnungen mit 3.5 und 4.5 Zimmern im LOU verbinden urbanes Leben mit höchster Wohnqualität, mitten im aufstrebenden Quartier Tribschen.</p>
-      <ul class="tv-bullets"><li>Lichtdurchflutete Räume</li><li>Eigene Loggia oder Terrasse</li><li>Hochwertige Küche mit Quooker</li><li>Nur Minuten zu Bahnhof und Altstadt</li></ul>
+      <ul class="tv-bullets"><li>✨ Lichtdurchflutete Räume und moderne Materialien</li><li>🌿 Eigene Loggia oder Terrasse</li><li>🍴 Hochwertige Küche mit Quooker Armatur</li><li>🚉 Nur Minuten zu Bahnhof, See und Altstadt</li></ul>
       <div class="tv-foot"><button class="cmt-btn" data-id="text_v2">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
       </svg>
       <span>Kommentar</span><span class="badge">0</span>
     </button></div>
-      <div class="tv-cta">Bezug ab Sommer 2026 · Jetzt virtuell besichtigen</div>
+      <div class="tv-cta">
+        <div class="info">Bezug ab Sommer 2026.</div>
+        <div class="action">👉 Jetzt virtuell besichtigen.</div>
+      </div>
     </div>
 <div class="tv-card">
       <div class="tv-head">
         <span class="tv-num">V3</span>
         <span class="tv-title">Lifestyle Hook</span>
       </div>
-      <div class="tv-headline">«Sonntagsbrunch auf der Loggia. Der See zehn Minuten entfernt.»</div>
-      <p class="tv-body">Im LOU entstehen grosszügige Mietwohnungen mit 3.5 und 4.5 Zimmern, die Platz für alles bieten: Familie, Hobbys, Freunde, Alltag.</p>
-      <ul class="tv-bullets"><li>Helle, offene Wohnräume</li><li>Alpen, See und Altstadt vor der Haustür</li><li>Einkauf direkt im Erdgeschoss</li></ul>
+      <div class="tv-headline">«Sonntagsbrunch auf der Loggia. Der See zehn Minuten entfernt. Die Berge zum Greifen nah.»</div>
+      <p class="tv-body">Im LOU werden grosszügige Mietwohnungen mit 3.5 und 4.5 Zimmern wahr, die Platz für alles bieten: Familie, Hobbys, Freunde, Alltag.</p>
+      <ul class="tv-bullets"><li>🌅 Helle, offene Wohnräume</li><li>🏞 Alpen, See und Altstadt vor der Haustür</li><li>🛍 Einkauf direkt im Erdgeschoss</li><li>🔑 Bezug 1. Juli 2026</li></ul>
       <div class="tv-foot"><button class="cmt-btn" data-id="text_v3">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
       </svg>
       <span>Kommentar</span><span class="badge">0</span>
     </button></div>
-      <div class="tv-cta">Bezug 1. Juli 2026 · Wunschwohnung sichern</div>
+      <div class="tv-cta">
+        
+        <div class="action">👉 Jetzt deine Wunschwohnung sichern.</div>
+      </div>
     </div>
 <div class="tv-card">
       <div class="tv-head">
@@ -1194,14 +1207,17 @@ a { color: var(--bey-blue); text-decoration: none; }
       </div>
       <div class="tv-headline">«Grosse Wohnung in Luzern gesucht? Im LOU wirst du fündig.»</div>
       <p class="tv-body">Mietwohnungen mit 3.5 und 4.5 Zimmern, Loggia oder Terrasse, hochwertiger Ausstattung und unschlagbarer Lage an der Tribschenstrasse.</p>
-      <ul class="tv-bullets"><li>Mitten in Luzern, nah am See, ÖV und Einkauf</li><li>Quooker Armatur in jeder Küche</li><li>44 Einstellplätze im Haus</li><li>Bezug ab 1. Juli 2026</li></ul>
+      <ul class="tv-bullets"><li>🏙 Mitten in Luzern, nah an See, ÖV und Einkauf</li><li>🍳 Quooker Armatur in jeder Küche</li><li>🚗 44 Einstellplätze im Haus</li><li>📅 Bezug ab 1. Juli 2026</li></ul>
       <div class="tv-foot"><button class="cmt-btn" data-id="text_v4">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
       </svg>
       <span>Kommentar</span><span class="badge">0</span>
     </button></div>
-      <div class="tv-cta">Erste Mietverträge bereits abgeschlossen · Jetzt mieten</div>
+      <div class="tv-cta">
+        <div class="info">Die ersten Mietverträge werden bereits abgeschlossen.</div>
+        <div class="action">👉 Jetzt mieten, online und in wenigen Minuten.</div>
+      </div>
     </div>
 <div class="tv-card">
       <div class="tv-head">
@@ -1210,14 +1226,17 @@ a { color: var(--bey-blue); text-decoration: none; }
       </div>
       <div class="tv-headline">«Endlich ein Zuhause, in dem alle Platz haben.»</div>
       <p class="tv-body">Die Wohnungen mit 3.5 und 4.5 Zimmern im LOU bieten genug Raum für Familienleben, Homeoffice und Rückzug, mit privater Loggia oder Terrasse inklusive.</p>
-      <ul class="tv-bullets"><li>Familiengerechte Grundrisse</li><li>Spielplatz, Ufschötti und Park in der Nähe</li><li>Schulen und ÖV in Gehdistanz</li><li>Coop direkt im Erdgeschoss</li></ul>
+      <ul class="tv-bullets"><li>👨‍👩‍👧 Familiengerechte Grundrisse</li><li>🌳 Spielplatz, Ufschötti und Park in der Nähe</li><li>🚌 Schulen und ÖV in Gehdistanz</li><li>🛒 Coop direkt im Erdgeschoss</li></ul>
       <div class="tv-foot"><button class="cmt-btn" data-id="text_v5">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
       </svg>
       <span>Kommentar</span><span class="badge">0</span>
     </button></div>
-      <div class="tv-cta">Bezug ab 1. Juli 2026 · Exposé anfordern</div>
+      <div class="tv-cta">
+        <div class="info">Bezug ab 1. Juli 2026 in Luzern, Quartier Tribschen.</div>
+        <div class="action">👉 Jetzt vormerken und Exposé anfordern.</div>
+      </div>
     </div>
   </div>
 </section>
