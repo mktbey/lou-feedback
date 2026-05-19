@@ -694,6 +694,15 @@ a { color: var(--bey-blue); text-decoration: none; }
   text-decoration-color: rgba(0,0,0,0.2);
 }
 .cp-comment.done .author { color: #047857; }
+.cp-comment.kein-todo {
+  background: #f6f7f9;
+  border-color: #e2e6eb;
+}
+.cp-comment.kein-todo .text {
+  color: var(--text-muted);
+  font-style: italic;
+}
+.cp-comment.kein-todo .author { color: #6b7280; }
 .cp-comment .head .status-badge {
   display: inline-flex; align-items: center;
   font-size: 10px; font-weight: 700;
@@ -702,6 +711,41 @@ a { color: var(--bey-blue); text-decoration: none; }
   letter-spacing: 0.04em; text-transform: uppercase;
   margin-left: 8px; flex-shrink: 0;
 }
+.cp-comment .head .status-badge.done-badge { background: #10b981; }
+.cp-comment .head .status-badge.info-badge { background: #6b7280; }
+/* Segmented control for 3-way admin status switcher */
+.seg-ctl {
+  display: inline-flex;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
+}
+.seg-ctl button {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 11px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  letter-spacing: 0.02em;
+}
+.seg-ctl button:hover {
+  color: var(--bey-blue);
+  background: white;
+}
+.seg-ctl button.active {
+  background: white;
+  color: var(--bey-blue);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.cp-comment.done .seg-ctl button.active { color: #047857; }
+.cp-comment.kein-todo .seg-ctl button.active { color: #6b7280; }
 .cp-comment .actions button.admin-btn {
   background: var(--bey-light-50);
   color: var(--bey-blue);
@@ -1153,14 +1197,14 @@ body.admin-mode .admin-mail-btn { display: inline-flex; }
 <div class="update-banner" id="updateBanner">
   <div class="badge-icon">✓</div>
   <div class="ub-content">
-    Hallo <strong id="updateBannerName">…</strong>, seit deinem letzten Besuch wurden <strong id="updateBannerCount">0</strong> deiner Kommentare verarbeitet.
+    Hallo <strong id="updateBannerName">…</strong>, seit deinem letzten Besuch wurden <strong id="updateBannerCount">0</strong> deiner Kommentare gesichtet.
     <span class="ub-items" id="updateBannerItems"></span>
   </div>
   <button class="ub-close" onclick="closeUpdateBanner()">Verstanden</button>
 </div>
 
 <div class="status-bar">
-  <strong id="totalCounter">0</strong> Kommentare<span id="cntBreakdown" style="display:none;"> · <strong id="openCounter">0</strong> offen · <strong id="doneCounter">0</strong> erledigt</span><span id="cntHelper"> · Klicke auf <em>«Kommentar»</em> bei jedem Element für Feedback</span>
+  <strong id="totalCounter">0</strong> Kommentare<span id="cntBreakdown" style="display:none;"> · <strong id="openCounter">0</strong> offen · <strong id="doneCounter">0</strong> erledigt<span id="cntKeinTodo" style="display:none;"> · <strong id="keinTodoCounter">0</strong> ohne Todo</span></span><span id="cntHelper"> · Klicke auf <em>«Kommentar»</em> bei jedem Element für Feedback</span>
 </div>
 
 <section class="hero">
@@ -1934,39 +1978,53 @@ function renderCommentList() {
   let comments = state.comments
     .filter(c => c.itemId === state.currentItemId);
   // Apply status filter
-  if (state.filter === 'open') comments = comments.filter(c => c.status !== 'erledigt');
+  if (state.filter === 'open') comments = comments.filter(c => !c.status || c.status === 'open');
   else if (state.filter === 'erledigt') comments = comments.filter(c => c.status === 'erledigt');
+  else if (state.filter === 'kein_todo') comments = comments.filter(c => c.status === 'kein_todo');
   comments = comments.sort((a, b) => b.timestamp - a.timestamp);
 
-  // Update filter button counts and active state
-  const allCount = state.comments.filter(c => c.itemId === state.currentItemId).length;
-  const openCount = state.comments.filter(c => c.itemId === state.currentItemId && c.status !== 'erledigt').length;
-  const doneCount = allCount - openCount;
+  // Counts for filter buttons
+  const itemComments = state.comments.filter(c => c.itemId === state.currentItemId);
+  const allCount = itemComments.length;
+  const openCount = itemComments.filter(c => !c.status || c.status === 'open').length;
+  const doneCount = itemComments.filter(c => c.status === 'erledigt').length;
+  const keinTodoCount = itemComments.filter(c => c.status === 'kein_todo').length;
   const filterBar = document.getElementById('cpFilter');
   if (filterBar) {
     filterBar.innerHTML =
-      '<button data-f="all" class="' + (state.filter==='all'?'active':'') + '" onclick="setFilter(\'all\')">Alle <span>' + allCount + '</span></button>' +
-      '<button data-f="open" class="' + (state.filter==='open'?'active':'') + '" onclick="setFilter(\'open\')">Offen <span>' + openCount + '</span></button>' +
-      '<button data-f="erledigt" class="' + (state.filter==='erledigt'?'active':'') + '" onclick="setFilter(\'erledigt\')">Erledigt <span>' + doneCount + '</span></button>';
+      '<button class="' + (state.filter==='all'?'active':'') + '" onclick="setFilter(\'all\')">Alle <span>' + allCount + '</span></button>' +
+      '<button class="' + (state.filter==='open'?'active':'') + '" onclick="setFilter(\'open\')">Offen <span>' + openCount + '</span></button>' +
+      '<button class="' + (state.filter==='erledigt'?'active':'') + '" onclick="setFilter(\'erledigt\')">Erledigt <span>' + doneCount + '</span></button>' +
+      '<button class="' + (state.filter==='kein_todo'?'active':'') + '" onclick="setFilter(\'kein_todo\')">Kein Todo <span>' + keinTodoCount + '</span></button>';
   }
 
   if (comments.length === 0) {
-    const emptyMsg = state.filter === 'erledigt' ? 'Noch keine erledigten Kommentare zu diesem Element.' :
-                     state.filter === 'open' ? 'Keine offenen Kommentare — alles verarbeitet ✓' :
-                     'Noch keine Kommentare zu diesem Element.';
+    let emptyMsg;
+    if (state.filter === 'erledigt') emptyMsg = 'Noch keine erledigten Kommentare zu diesem Element.';
+    else if (state.filter === 'kein_todo') emptyMsg = 'Keine als «Kein Todo» markierten Kommentare.';
+    else if (state.filter === 'open') emptyMsg = 'Keine offenen Kommentare — alles bearbeitet ✓';
+    else emptyMsg = 'Noch keine Kommentare zu diesem Element.';
     list.innerHTML = '<div class="cp-empty"><div class="icon">💬</div><div>' + emptyMsg + '</div><div style="margin-top:8px;font-size:12px;opacity:0.7;">Sei die erste Person, die Feedback gibt.</div></div>';
     return;
   }
   list.innerHTML = comments.map(c => {
     const own = c.author === state.reviewerName;
-    const done = c.status === 'erledigt';
-    const cls = 'cp-comment' + (done ? ' done' : '');
-    const statusBadge = done ? '<span class="status-badge">✓ Erledigt</span>' : '';
+    const currentStatus = c.status || 'open';
+    const done = currentStatus === 'erledigt';
+    const keinTodo = currentStatus === 'kein_todo';
+    let cls = 'cp-comment';
+    if (done) cls += ' done';
+    else if (keinTodo) cls += ' kein-todo';
+    let statusBadge = '';
+    if (done) statusBadge = '<span class="status-badge done-badge">✓ Erledigt</span>';
+    else if (keinTodo) statusBadge = '<span class="status-badge info-badge">ⓘ Kein Todo</span>';
     let actions = '';
     if (state.isAdmin) {
-      const newStatus = done ? 'open' : 'erledigt';
-      const label = done ? '↩ Wieder offen' : '✓ Als erledigt markieren';
-      actions = '<div class="actions"><button class="admin-btn" onclick="toggleStatus(\'' + c.id + '\',\'' + newStatus + '\')">' + label + '</button></div>';
+      actions = '<div class="actions"><div class="seg-ctl">' +
+        '<button class="' + (currentStatus==='open'?'active':'') + '" onclick="toggleStatus(\'' + c.id + '\',\'open\')">Offen</button>' +
+        '<button class="' + (currentStatus==='erledigt'?'active':'') + '" onclick="toggleStatus(\'' + c.id + '\',\'erledigt\')">✓ Erledigt</button>' +
+        '<button class="' + (currentStatus==='kein_todo'?'active':'') + '" onclick="toggleStatus(\'' + c.id + '\',\'kein_todo\')">ⓘ Kein Todo</button>' +
+      '</div></div>';
     } else if (own) {
       actions = '<div class="actions"><button onclick="deleteComment(\'' + c.id + '\')">Löschen</button></div>';
     }
@@ -1993,7 +2051,11 @@ async function toggleStatus(id, newStatus) {
     }
     renderCommentList();
     updateAllBadges();
-    showToast(newStatus === 'erledigt' ? 'Als erledigt markiert ✓' : 'Wieder geöffnet');
+    let toastMsg = 'Status aktualisiert';
+    if (newStatus === 'erledigt') toastMsg = 'Als erledigt markiert ✓';
+    else if (newStatus === 'kein_todo') toastMsg = 'Als «Kein Todo» markiert ⓘ';
+    else if (newStatus === 'open') toastMsg = 'Wieder als offen markiert';
+    showToast(toastMsg);
   } else {
     showToast('Status-Update fehlgeschlagen');
   }
@@ -2046,7 +2108,7 @@ function updateAllBadges() {
   document.querySelectorAll('.cmt-btn').forEach(btn => {
     const itemId = btn.dataset.id;
     const itemComments = state.comments.filter(c => c.itemId === itemId);
-    const openCount = itemComments.filter(c => c.status !== 'erledigt').length;
+    const openCount = itemComments.filter(c => !c.status || c.status === 'open').length;
     const totalCount = itemComments.length;
     const badge = btn.querySelector('.badge');
     badge.textContent = totalCount;
@@ -2055,16 +2117,21 @@ function updateAllBadges() {
   });
   const counter = document.getElementById('totalCounter');
   if (counter) counter.textContent = state.comments.length;
-  // Open / Done breakdown in status bar
+  // Breakdown counts
   const total = state.comments.length;
-  const open = state.comments.filter(c => c.status !== 'erledigt').length;
-  const done = total - open;
+  const open = state.comments.filter(c => !c.status || c.status === 'open').length;
+  const done = state.comments.filter(c => c.status === 'erledigt').length;
+  const keinTodo = state.comments.filter(c => c.status === 'kein_todo').length;
   const breakdown = document.getElementById('cntBreakdown');
   const helper = document.getElementById('cntHelper');
   const openEl = document.getElementById('openCounter');
   const doneEl = document.getElementById('doneCounter');
+  const keinTodoEl = document.getElementById('keinTodoCounter');
+  const ktoSpan = document.getElementById('cntKeinTodo');
   if (openEl) openEl.textContent = open;
   if (doneEl) doneEl.textContent = done;
+  if (keinTodoEl) keinTodoEl.textContent = keinTodo;
+  if (ktoSpan) ktoSpan.style.display = keinTodo > 0 ? 'inline' : 'none';
   if (breakdown && helper) {
     if (total > 0) { breakdown.style.display = 'inline'; helper.style.display = 'none'; }
     else { breakdown.style.display = 'none'; helper.style.display = 'inline'; }
@@ -2112,10 +2179,10 @@ function checkForUpdates() {
   if (!state.reviewerName) return;
   const lastSeenKey = 'lou_last_seen_' + state.reviewerName.toLowerCase();
   const lastSeen = parseInt(localStorage.getItem(lastSeenKey) || '0');
-  // Find my comments that were marked erledigt after my last visit
+  // Find my comments that were marked erledigt OR kein_todo after my last visit
   const myProcessed = state.comments.filter(c => {
     if (c.author !== state.reviewerName) return false;
-    if (c.status !== 'erledigt') return false;
+    if (c.status !== 'erledigt' && c.status !== 'kein_todo') return false;
     if (!c.statusChangedAt) return false;
     return new Date(c.statusChangedAt).getTime() > lastSeen;
   });
@@ -2152,14 +2219,14 @@ function closeUpdateBanner() {
 
 // === Option 3: Update-Mail vorbereiten (Admin) ===
 function openEmailModal() {
-  const erledigt = state.comments.filter(c => c.status === 'erledigt');
-  if (erledigt.length === 0) {
-    showToast('Noch keine erledigten Kommentare zum Mitteilen');
+  const processed = state.comments.filter(c => c.status === 'erledigt' || c.status === 'kein_todo');
+  if (processed.length === 0) {
+    showToast('Noch keine verarbeiteten Kommentare zum Mitteilen');
     return;
   }
   // Group by author
   const byAuthor = {};
-  erledigt.forEach(c => {
+  processed.forEach(c => {
     if (!byAuthor[c.author]) byAuthor[c.author] = [];
     byAuthor[c.author].push(c);
   });
@@ -2168,14 +2235,17 @@ function openEmailModal() {
   const authors = Object.keys(byAuthor);
   const greeting = authors.length === 1 ? 'Hi ' + authors[0] : 'Hallo zusammen';
   let body = greeting + ',\n\n' +
-    'kurzes Update zum LOU-Anzeigenkonzept — folgende Punkte aus deinem Feedback wurden in der aktuellen Version berücksichtigt:\n\n';
+    'kurzes Update zum LOU-Anzeigenkonzept — folgende Punkte aus deinem Feedback wurden gesichtet:\n\n';
   Object.entries(byAuthor).forEach(([author, comments]) => {
     if (authors.length > 1) body += author + ':\n';
+    // Sort: erledigt first, kein_todo after
+    comments.sort((a, b) => (a.status === 'erledigt' ? 0 : 1) - (b.status === 'erledigt' ? 0 : 1));
     comments.forEach(c => {
       const item = getItemLabel(c.itemId);
       const txt = c.text.replace(/\s+/g, ' ').trim();
       const preview = txt.length > 110 ? txt.slice(0, 110) + '…' : txt;
-      body += '• ' + item + '\n  «' + preview + '»\n\n';
+      const marker = c.status === 'erledigt' ? '✓ umgesetzt' : 'ⓘ zur Kenntnis genommen';
+      body += '• ' + item + '  [' + marker + ']\n  «' + preview + '»\n\n';
     });
   });
   body += 'Die aktualisierte Seite findest du hier:\n' + url + '\n\n' +
