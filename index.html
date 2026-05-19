@@ -303,6 +303,17 @@ a { color: var(--bey-blue); text-decoration: none; }
   background: var(--bey-light-50);
   color: var(--bey-blue);
 }
+.cmt-btn.all-done {
+  border-color: #10b981;
+  background: #ecfdf5;
+  color: #047857;
+}
+.cmt-btn.all-done .badge { background: #10b981; }
+.cmt-btn.all-done::before {
+  content: "✓";
+  margin-right: 4px;
+  font-weight: 700;
+}
 
 /* VIDEOS */
 .video-grid {
@@ -673,6 +684,59 @@ a { color: var(--bey-blue); text-decoration: none; }
   font-family: inherit;
 }
 .cp-comment .actions button:hover { color: var(--bey-blue); }
+.cp-comment.done {
+  background: #f9fbf9;
+  border-color: #d1fae5;
+}
+.cp-comment.done .text {
+  color: var(--text-muted);
+  text-decoration: line-through;
+  text-decoration-color: rgba(0,0,0,0.2);
+}
+.cp-comment.done .author { color: #047857; }
+.cp-comment .head .status-badge {
+  display: inline-flex; align-items: center;
+  font-size: 10px; font-weight: 700;
+  background: #10b981; color: white;
+  padding: 3px 8px; border-radius: 4px;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  margin-left: 8px; flex-shrink: 0;
+}
+.cp-comment .actions button.admin-btn {
+  background: var(--bey-light-50);
+  color: var(--bey-blue);
+  font-weight: 600; font-size: 12px;
+  padding: 6px 12px; border-radius: 6px;
+  border: 1px solid var(--bey-light-100);
+}
+.cp-comment .actions button.admin-btn:hover {
+  background: var(--bey-blue); color: white;
+  border-color: var(--bey-blue);
+}
+.cp-filter {
+  display: flex; gap: 6px;
+  padding: 14px 24px 0;
+  background: var(--bg-soft);
+}
+.cp-filter button {
+  background: white; border: 1px solid var(--line);
+  color: var(--text-muted); font-size: 12px; font-weight: 600;
+  padding: 6px 12px; border-radius: 999px;
+  cursor: pointer; font-family: inherit;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: all 0.15s;
+}
+.cp-filter button:hover { border-color: var(--bey-blue); color: var(--bey-blue); }
+.cp-filter button.active {
+  background: var(--bey-blue); color: white;
+  border-color: var(--bey-blue);
+}
+.cp-filter button span {
+  background: rgba(0,0,0,0.08); border-radius: 8px;
+  font-size: 10px; padding: 1px 6px;
+  min-width: 18px; text-align: center;
+}
+.cp-filter button.active span { background: rgba(255,255,255,0.25); }
 .cp-form {
   border-top: 1px solid var(--line);
   padding: 20px 24px 24px;
@@ -767,6 +831,84 @@ a { color: var(--bey-blue); text-decoration: none; }
   width: 100%; font-family: inherit;
 }
 .modal-content button:hover { background: var(--bey-blue-deep); }
+
+/* CHANGELOG MODAL */
+.modal-content.changelog {
+  max-width: 560px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 40px 36px 32px;
+}
+.modal-content.changelog h2 { margin-bottom: 24px; }
+.modal-content.changelog .version {
+  border-left: 3px solid var(--bey-blue);
+  padding: 12px 0 12px 20px;
+  margin-bottom: 24px;
+}
+.modal-content.changelog .version:last-of-type {
+  border-left-color: var(--line);
+  opacity: 0.75;
+}
+.modal-content.changelog .version-head {
+  display: flex; align-items: baseline; gap: 12px;
+  margin-bottom: 10px;
+}
+.modal-content.changelog .version-num {
+  font-size: 18px; font-weight: 800;
+  color: var(--bey-blue);
+}
+.modal-content.changelog .version-date {
+  font-size: 12px; color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+.modal-content.changelog ul {
+  list-style: none; padding: 0; margin: 0;
+}
+.modal-content.changelog li {
+  font-size: 14px; color: var(--text-body);
+  line-height: 1.55; padding: 5px 0;
+  position: relative; padding-left: 18px;
+}
+.modal-content.changelog li::before {
+  content: "→"; color: var(--bey-blue);
+  position: absolute; left: 0; font-weight: 700;
+}
+.modal-content.changelog .modal-close-btn {
+  margin-top: 8px;
+}
+
+/* VERSION PILL in hero eyebrow */
+.version-pill {
+  background: #d6336c;
+  border: 1px solid #b8285a;
+  color: white;
+  padding: 6px 14px; border-radius: 999px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  font-family: inherit; cursor: pointer;
+  transition: all 0.18s;
+  display: inline-flex; align-items: center; gap: 6px;
+  box-shadow: 0 4px 14px rgba(214, 51, 108, 0.28);
+}
+.version-pill:hover {
+  background: #b8285a;
+  border-color: #911f47;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(214, 51, 108, 0.4);
+}
+.version-pill .arrow { font-size: 13px; }
+
+/* ADMIN INDICATOR in nav */
+.admin-indicator {
+  display: none;
+  background: #fef3c7; color: #92400e;
+  padding: 4px 10px; border-radius: 6px;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  align-items: center; gap: 4px;
+  margin-right: 12px;
+}
+body.admin-mode .admin-indicator { display: inline-flex; }
 
 .toast {
   position: fixed; bottom: 32px; left: 50%;
@@ -892,6 +1034,7 @@ a { color: var(--bey-blue); text-decoration: none; }
     <a href="#texte">Texte</a>
     <a href="#fragen">Fragen</a>
   </div>
+  <div class="admin-indicator" id="adminIndicator">⚙ Admin</div>
   <div class="user" id="reviewerLabel"></div>
   <button class="mobile-toggle" onclick="toggleMobileMenu()" aria-label="Menü">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
@@ -899,12 +1042,15 @@ a { color: var(--bey-blue); text-decoration: none; }
 </nav>
 
 <div class="status-bar">
-  <strong id="totalCounter">0</strong> Kommentare · Klicke auf <em>«Kommentar»</em> bei jedem Element für Feedback
+  <strong id="totalCounter">0</strong> Kommentare<span id="cntBreakdown" style="display:none;"> · <strong id="openCounter">0</strong> offen · <strong id="doneCounter">0</strong> erledigt</span><span id="cntHelper"> · Klicke auf <em>«Kommentar»</em> bei jedem Element für Feedback</span>
 </div>
 
 <section class="hero">
   <div class="hero-inner">
-    <div class="eyebrow">LOU Luzern · Tribschenstrasse</div>
+    <div class="eyebrow-row" style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:36px;">
+      <div class="eyebrow" style="margin-bottom:0;">LOU Luzern · Tribschenstrasse</div>
+      <button class="version-pill" onclick="openChangelog()">v2 · 19.05.2026 <span class="arrow">→</span></button>
+    </div>
     <h1>Facebook & Instagram <span class="accent">Anzeigenkonzept.</span></h1>
     <p class="lede">Vorlage zur Abstimmung für die LOU-Kampagne. Mai 2026.</p>
     <div class="intro-box">
@@ -1379,6 +1525,7 @@ a { color: var(--bey-blue); text-decoration: none; }
     </div>
     <button class="close" onclick="closeCommentPanel()">✕</button>
   </div>
+  <div class="cp-filter" id="cpFilter"></div>
   <div class="cp-list" id="cpList"></div>
   <div class="cp-form">
     <textarea id="cpText" placeholder="Dein Kommentar oder deine Frage…"></textarea>
@@ -1388,6 +1535,38 @@ a { color: var(--bey-blue); text-decoration: none; }
     </div>
   </div>
 </aside>
+
+<div class="modal" id="changelogModal">
+  <div class="modal-content changelog">
+    <div class="label">Versionshistorie</div>
+    <h2>Aktualisierungen</h2>
+    <div class="version">
+      <div class="version-head">
+        <span class="version-num">v2</span>
+        <span class="version-date">19. Mai 2026</span>
+      </div>
+      <ul>
+        <li>Finale Bilder eingebaut (mit «Jetzt mieten»-CTA)</li>
+        <li>Finale Videos in allen drei Formaten (16:9, 9:16, 1:1)</li>
+        <li>V1 &amp; V4 — CTAs getauscht nach erstem Feedback</li>
+        <li>Bezugstermin durchgängig «Sommer 2026»</li>
+        <li>Frage zur Plattformwahl entfernt</li>
+        <li>Kommentar-Status: Verarbeitete Punkte werden jetzt als «Erledigt» markiert</li>
+      </ul>
+    </div>
+    <div class="version">
+      <div class="version-head">
+        <span class="version-num">v1</span>
+        <span class="version-date">13. Mai 2026</span>
+      </div>
+      <ul>
+        <li>Erstkonzept mit Bildanzeigen, Texten und offenen Fragen</li>
+        <li>Videoanzeigen als Platzhalter (Produktion lief)</li>
+      </ul>
+    </div>
+    <button onclick="closeChangelog()" class="modal-close-btn">Schliessen</button>
+  </div>
+</div>
 
 <div class="modal" id="nameModal">
   <div class="modal-content">
@@ -1413,7 +1592,7 @@ const SB_HEADERS = {
 };
 const NAME_KEY = 'lou_reviewer_name';
 
-let state = { comments: [], reviewerName: '', currentItemId: null, online: true };
+let state = { comments: [], reviewerName: '', currentItemId: null, online: true, isAdmin: false, filter: 'all' };
 
 const itemLabels = {
   'bild_motiv1_191x1': 'Motiv 1 · 1.91:1 (Feed Desktop)',
@@ -1447,6 +1626,7 @@ async function fetchComments() {
       itemId: c.item_id,
       author: c.author,
       text: c.text,
+      status: c.status || 'open',
       timestamp: new Date(c.created_at).getTime()
     }));
     state.online = true;
@@ -1467,13 +1647,29 @@ async function insertComment(comment) {
         id: comment.id,
         item_id: comment.itemId,
         author: comment.author,
-        text: comment.text
+        text: comment.text,
+        status: 'open'
       })
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     return true;
   } catch (e) {
     console.error('insertComment failed:', e);
+    return false;
+  }
+}
+
+async function updateCommentStatus(id, newStatus) {
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/comments?id=eq.' + encodeURIComponent(id), {
+      method: 'PATCH',
+      headers: SB_HEADERS,
+      body: JSON.stringify({ status: newStatus })
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return true;
+  } catch (e) {
+    console.error('updateCommentStatus failed:', e);
     return false;
   }
 }
@@ -1573,21 +1769,69 @@ function updateCpUserInfo() {
 
 function renderCommentList() {
   const list = document.getElementById('cpList');
-  const comments = state.comments
-    .filter(c => c.itemId === state.currentItemId)
-    .sort((a, b) => b.timestamp - a.timestamp);
+  let comments = state.comments
+    .filter(c => c.itemId === state.currentItemId);
+  // Apply status filter
+  if (state.filter === 'open') comments = comments.filter(c => c.status !== 'erledigt');
+  else if (state.filter === 'erledigt') comments = comments.filter(c => c.status === 'erledigt');
+  comments = comments.sort((a, b) => b.timestamp - a.timestamp);
+
+  // Update filter button counts and active state
+  const allCount = state.comments.filter(c => c.itemId === state.currentItemId).length;
+  const openCount = state.comments.filter(c => c.itemId === state.currentItemId && c.status !== 'erledigt').length;
+  const doneCount = allCount - openCount;
+  const filterBar = document.getElementById('cpFilter');
+  if (filterBar) {
+    filterBar.innerHTML =
+      '<button data-f="all" class="' + (state.filter==='all'?'active':'') + '" onclick="setFilter(\'all\')">Alle <span>' + allCount + '</span></button>' +
+      '<button data-f="open" class="' + (state.filter==='open'?'active':'') + '" onclick="setFilter(\'open\')">Offen <span>' + openCount + '</span></button>' +
+      '<button data-f="erledigt" class="' + (state.filter==='erledigt'?'active':'') + '" onclick="setFilter(\'erledigt\')">Erledigt <span>' + doneCount + '</span></button>';
+  }
+
   if (comments.length === 0) {
-    list.innerHTML = '<div class="cp-empty"><div class="icon">💬</div><div>Noch keine Kommentare zu diesem Element.</div><div style="margin-top:8px;font-size:12px;opacity:0.7;">Sei die erste Person, die Feedback gibt.</div></div>';
+    const emptyMsg = state.filter === 'erledigt' ? 'Noch keine erledigten Kommentare zu diesem Element.' :
+                     state.filter === 'open' ? 'Keine offenen Kommentare — alles verarbeitet ✓' :
+                     'Noch keine Kommentare zu diesem Element.';
+    list.innerHTML = '<div class="cp-empty"><div class="icon">💬</div><div>' + emptyMsg + '</div><div style="margin-top:8px;font-size:12px;opacity:0.7;">Sei die erste Person, die Feedback gibt.</div></div>';
     return;
   }
   list.innerHTML = comments.map(c => {
     const own = c.author === state.reviewerName;
-    return '<div class="cp-comment">' +
-      '<div class="head"><span class="author">' + escapeHtml(c.author) + '</span><span class="time">' + formatTime(c.timestamp) + '</span></div>' +
+    const done = c.status === 'erledigt';
+    const cls = 'cp-comment' + (done ? ' done' : '');
+    const statusBadge = done ? '<span class="status-badge">✓ Erledigt</span>' : '';
+    let actions = '';
+    if (state.isAdmin) {
+      const newStatus = done ? 'open' : 'erledigt';
+      const label = done ? '↩ Wieder offen' : '✓ Als erledigt markieren';
+      actions = '<div class="actions"><button class="admin-btn" onclick="toggleStatus(\'' + c.id + '\',\'' + newStatus + '\')">' + label + '</button></div>';
+    } else if (own) {
+      actions = '<div class="actions"><button onclick="deleteComment(\'' + c.id + '\')">Löschen</button></div>';
+    }
+    return '<div class="' + cls + '">' +
+      '<div class="head"><span class="author">' + escapeHtml(c.author) + '</span>' + statusBadge + '<span class="time">' + formatTime(c.timestamp) + '</span></div>' +
       '<div class="text">' + escapeHtml(c.text) + '</div>' +
-      (own ? '<div class="actions"><button onclick="deleteComment(\'' + c.id + '\')">Löschen</button></div>' : '') +
+      actions +
     '</div>';
   }).join('');
+}
+
+function setFilter(f) {
+  state.filter = f;
+  renderCommentList();
+}
+
+async function toggleStatus(id, newStatus) {
+  const ok = await updateCommentStatus(id, newStatus);
+  if (ok) {
+    const c = state.comments.find(x => x.id === id);
+    if (c) c.status = newStatus;
+    renderCommentList();
+    updateAllBadges();
+    showToast(newStatus === 'erledigt' ? 'Als erledigt markiert ✓' : 'Wieder geöffnet');
+  } else {
+    showToast('Status-Update fehlgeschlagen');
+  }
 }
 
 async function submitComment() {
@@ -1603,6 +1847,7 @@ async function submitComment() {
     itemId: state.currentItemId,
     author: state.reviewerName,
     text: text,
+    status: 'open',
     timestamp: Date.now()
   };
   const ok = await insertComment(comment);
@@ -1635,13 +1880,30 @@ async function deleteComment(id) {
 function updateAllBadges() {
   document.querySelectorAll('.cmt-btn').forEach(btn => {
     const itemId = btn.dataset.id;
-    const count = state.comments.filter(c => c.itemId === itemId).length;
+    const itemComments = state.comments.filter(c => c.itemId === itemId);
+    const openCount = itemComments.filter(c => c.status !== 'erledigt').length;
+    const totalCount = itemComments.length;
     const badge = btn.querySelector('.badge');
-    badge.textContent = count;
-    btn.classList.toggle('has-comments', count > 0);
+    badge.textContent = totalCount;
+    btn.classList.toggle('has-comments', totalCount > 0);
+    btn.classList.toggle('all-done', totalCount > 0 && openCount === 0);
   });
   const counter = document.getElementById('totalCounter');
   if (counter) counter.textContent = state.comments.length;
+  // Open / Done breakdown in status bar
+  const total = state.comments.length;
+  const open = state.comments.filter(c => c.status !== 'erledigt').length;
+  const done = total - open;
+  const breakdown = document.getElementById('cntBreakdown');
+  const helper = document.getElementById('cntHelper');
+  const openEl = document.getElementById('openCounter');
+  const doneEl = document.getElementById('doneCounter');
+  if (openEl) openEl.textContent = open;
+  if (doneEl) doneEl.textContent = done;
+  if (breakdown && helper) {
+    if (total > 0) { breakdown.style.display = 'inline'; helper.style.display = 'none'; }
+    else { breakdown.style.display = 'none'; helper.style.display = 'inline'; }
+  }
 }
 
 function escapeHtml(s) {
@@ -1674,7 +1936,33 @@ function toggleMobileMenu() {
   document.querySelector('.topnav').classList.toggle('menu-open');
 }
 
+function checkAdminMode() {
+  try {
+    const params = new URLSearchParams(location.search);
+    if (params.has('admin')) {
+      localStorage.setItem('lou_admin', '1');
+    }
+    if (params.has('logout-admin')) {
+      localStorage.removeItem('lou_admin');
+    }
+    state.isAdmin = localStorage.getItem('lou_admin') === '1';
+  } catch (e) { state.isAdmin = false; }
+  if (state.isAdmin) {
+    document.body.classList.add('admin-mode');
+    const badge = document.getElementById('adminIndicator');
+    if (badge) badge.style.display = 'inline-flex';
+  }
+}
+
+function openChangelog() {
+  document.getElementById('changelogModal').classList.add('open');
+}
+function closeChangelog() {
+  document.getElementById('changelogModal').classList.remove('open');
+}
+
 async function init() {
+  checkAdminMode();
   state.reviewerName = loadReviewerName();
   updateReviewerLabel();
   await fetchComments();
