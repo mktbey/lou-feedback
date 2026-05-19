@@ -879,8 +879,8 @@ a { color: var(--bey-blue); text-decoration: none; }
 
 /* VERSION PILL in hero eyebrow */
 .version-pill {
-  background: #d6336c;
-  border: 1px solid #b8285a;
+  background: var(--bey-blue);
+  border: 1px solid var(--bey-blue-deep);
   color: white;
   padding: 6px 14px; border-radius: 999px;
   font-size: 11px; font-weight: 700;
@@ -888,13 +888,24 @@ a { color: var(--bey-blue); text-decoration: none; }
   font-family: inherit; cursor: pointer;
   transition: all 0.18s;
   display: inline-flex; align-items: center; gap: 6px;
-  box-shadow: 0 4px 14px rgba(214, 51, 108, 0.28);
+  box-shadow: 0 4px 14px rgba(60, 87, 225, 0.28);
 }
 .version-pill:hover {
-  background: #b8285a;
-  border-color: #911f47;
+  background: var(--bey-blue-deep);
+  border-color: var(--bey-blue-deep);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(214, 51, 108, 0.4);
+  box-shadow: 0 6px 20px rgba(60, 87, 225, 0.4);
+}
+.version-pill.has-updates {
+  background: #a7faa9;
+  border-color: #7ad97c;
+  color: #0f5132;
+  box-shadow: 0 4px 14px rgba(122, 217, 124, 0.45);
+}
+.version-pill.has-updates:hover {
+  background: #91e893;
+  border-color: #5fc862;
+  box-shadow: 0 6px 20px rgba(122, 217, 124, 0.6);
 }
 .version-pill .arrow { font-size: 13px; }
 
@@ -2057,6 +2068,12 @@ function updateAllBadges() {
   if (breakdown && helper) {
     if (total > 0) { breakdown.style.display = 'inline'; helper.style.display = 'none'; }
     else { breakdown.style.display = 'none'; helper.style.display = 'inline'; }
+  }
+  // Version pill: success-green when any comment is processed (erledigt or kein_todo)
+  const pill = document.querySelector('.version-pill');
+  if (pill) {
+    const hasProcessed = state.comments.some(c => c.status === 'erledigt' || c.status === 'kein_todo');
+    pill.classList.toggle('has-updates', hasProcessed);
   }
 }
 
