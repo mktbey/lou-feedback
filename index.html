@@ -910,6 +910,103 @@ a { color: var(--bey-blue); text-decoration: none; }
 }
 body.admin-mode .admin-indicator { display: inline-flex; }
 
+/* UPDATE BANNER (Janina kommt zurück) */
+.update-banner {
+  display: none;
+  background: #ecfdf5;
+  border-bottom: 1px solid #a7f3d0;
+  padding: 16px 32px;
+  align-items: center; gap: 16px;
+  font-size: 14px; color: #065f46;
+}
+.update-banner .badge-icon {
+  background: #10b981; color: white;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 16px; flex-shrink: 0;
+}
+.update-banner .ub-content { flex: 1; line-height: 1.5; }
+.update-banner .ub-content strong { font-weight: 700; color: #047857; }
+.update-banner .ub-items {
+  display: block; margin-top: 4px;
+  font-size: 12.5px; color: #047857; opacity: 0.85;
+}
+.update-banner .ub-close {
+  background: white; border: 1px solid #a7f3d0;
+  color: #065f46; padding: 8px 16px; border-radius: 999px;
+  cursor: pointer; font-family: inherit; font-size: 12.5px;
+  font-weight: 600; transition: all 0.15s;
+}
+.update-banner .ub-close:hover {
+  background: #10b981; color: white; border-color: #10b981;
+}
+
+/* ADMIN MAIL BUTTON */
+.admin-mail-btn {
+  display: none;
+  background: #d6336c; color: white; border: none;
+  padding: 8px 14px; border-radius: 999px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  cursor: pointer; font-family: inherit;
+  margin-right: 12px; align-items: center; gap: 6px;
+  transition: all 0.15s;
+}
+.admin-mail-btn:hover { background: #b8285a; }
+body.admin-mode .admin-mail-btn { display: inline-flex; }
+
+/* EMAIL MODAL */
+.modal-content.email-modal {
+  max-width: 640px;
+  max-height: 86vh;
+  overflow-y: auto;
+  padding: 36px 32px 28px;
+}
+.email-modal h2 { margin-bottom: 8px; }
+.email-modal .hint {
+  font-size: 13px; color: var(--text-muted);
+  margin-bottom: 20px;
+}
+.email-modal label {
+  display: block; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--bey-blue); margin-bottom: 6px; margin-top: 14px;
+}
+.email-modal input.subject-input,
+.email-modal textarea.body-input {
+  width: 100%; border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13.5px; font-family: inherit;
+  color: var(--text); resize: vertical;
+  margin-bottom: 0;
+}
+.email-modal textarea.body-input {
+  min-height: 280px; line-height: 1.55;
+  font-family: 'SF Mono', Menlo, monospace; font-size: 12.5px;
+}
+.email-modal .btn-row {
+  display: flex; gap: 10px; margin-top: 20px;
+}
+.email-modal .btn-row button {
+  flex: 1; width: auto;
+}
+.email-modal .btn-secondary {
+  background: white !important;
+  color: var(--bey-blue) !important;
+  border: 1px solid var(--bey-light-100) !important;
+}
+.email-modal .btn-secondary:hover {
+  background: var(--bey-light-50) !important;
+}
+.email-modal .btn-close {
+  background: transparent !important;
+  color: var(--text-muted) !important;
+  border: none !important;
+}
+.email-modal .btn-close:hover { color: var(--text); }
+
 .toast {
   position: fixed; bottom: 32px; left: 50%;
   transform: translateX(-50%) translateY(120%);
@@ -1034,12 +1131,22 @@ body.admin-mode .admin-indicator { display: inline-flex; }
     <a href="#texte">Texte</a>
     <a href="#fragen">Fragen</a>
   </div>
+  <button class="admin-mail-btn" id="adminMailBtn" onclick="openEmailModal()">📧 Update-Mail</button>
   <div class="admin-indicator" id="adminIndicator">⚙ Admin</div>
   <div class="user" id="reviewerLabel"></div>
   <button class="mobile-toggle" onclick="toggleMobileMenu()" aria-label="Menü">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
 </nav>
+
+<div class="update-banner" id="updateBanner">
+  <div class="badge-icon">✓</div>
+  <div class="ub-content">
+    Hallo <strong id="updateBannerName">…</strong>, seit deinem letzten Besuch wurden <strong id="updateBannerCount">0</strong> deiner Kommentare verarbeitet.
+    <span class="ub-items" id="updateBannerItems"></span>
+  </div>
+  <button class="ub-close" onclick="closeUpdateBanner()">Verstanden</button>
+</div>
 
 <div class="status-bar">
   <strong id="totalCounter">0</strong> Kommentare<span id="cntBreakdown" style="display:none;"> · <strong id="openCounter">0</strong> offen · <strong id="doneCounter">0</strong> erledigt</span><span id="cntHelper"> · Klicke auf <em>«Kommentar»</em> bei jedem Element für Feedback</span>
@@ -1568,6 +1675,26 @@ body.admin-mode .admin-indicator { display: inline-flex; }
   </div>
 </div>
 
+<div class="modal" id="emailModal">
+  <div class="modal-content email-modal">
+    <div class="label">Admin · E-Mail-Update</div>
+    <h2>Update-Mail vorbereiten</h2>
+    <p class="hint">Vorbereitete Übersicht aller bisher als «Erledigt» markierten Kommentare. Du kannst alles vor dem Versand noch anpassen.</p>
+
+    <label>Betreff</label>
+    <input type="text" id="emailSubject" class="subject-input">
+
+    <label>Nachricht</label>
+    <textarea id="emailBody" class="body-input"></textarea>
+
+    <div class="btn-row">
+      <button onclick="sendEmailViaMailto()">📧 Mailprogramm öffnen</button>
+      <button class="btn-secondary" onclick="copyEmailToClipboard()">Kopieren</button>
+      <button class="btn-close" onclick="closeEmailModal()">Schliessen</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal" id="nameModal">
   <div class="modal-content">
     <div class="label">Willkommen</div>
@@ -1593,6 +1720,29 @@ const SB_HEADERS = {
 const NAME_KEY = 'lou_reviewer_name';
 
 let state = { comments: [], reviewerName: '', currentItemId: null, online: true, isAdmin: false, filter: 'all' };
+
+// Human-readable labels for items (used in update-banner + email)
+const ITEM_LABELS = {
+  'bild_motiv1_191x1': 'Motiv 1 · 1.91:1 (Feed Desktop)',
+  'bild_motiv1_1x1': 'Motiv 1 · 1:1 (Square)',
+  'bild_motiv1_4x5': 'Motiv 1 · 4:5 (Portrait)',
+  'bild_motiv2_191x1': 'Motiv 2 · 1.91:1 (Feed Desktop)',
+  'bild_motiv2_1x1': 'Motiv 2 · 1:1 (Square)',
+  'bild_motiv2_4x5': 'Motiv 2 · 4:5 (Portrait)',
+  'video_16x9': 'Video 16:9 (Feed/YouTube)',
+  'video_9x16': 'Video 9:16 (Stories/Reels)',
+  'video_1x1': 'Video 1:1 (Square)',
+  'text_v1': 'Textvariante V1 (Familie & Raum)',
+  'text_v2': 'Textvariante V2 (Qualität & Komfort)',
+  'text_v3': 'Textvariante V3 (Lifestyle Hook)',
+  'text_v4': 'Textvariante V4 (Direkt & Urgency)',
+  'text_v5': 'Textvariante V5 (Familienleben emotional)',
+  'frage_wohnungen': 'Frage 01: Wohnungs-Fokus',
+  'frage_motive': 'Frage 02: Bildmotive',
+  'frage_videos': 'Frage 03: Videoproduktion',
+  'frage_zeitplan': 'Frage 04: Zeitplan'
+};
+function getItemLabel(id) { return ITEM_LABELS[id] || id; }
 
 const itemLabels = {
   'bild_motiv1_191x1': 'Motiv 1 · 1.91:1 (Feed Desktop)',
@@ -1627,6 +1777,7 @@ async function fetchComments() {
       author: c.author,
       text: c.text,
       status: c.status || 'open',
+      statusChangedAt: c.status_changed_at ? new Date(c.status_changed_at).getTime() : null,
       timestamp: new Date(c.created_at).getTime()
     }));
     state.online = true;
@@ -1664,7 +1815,7 @@ async function updateCommentStatus(id, newStatus) {
     const res = await fetch(SUPABASE_URL + '/rest/v1/comments?id=eq.' + encodeURIComponent(id), {
       method: 'PATCH',
       headers: SB_HEADERS,
-      body: JSON.stringify({ status: newStatus })
+      body: JSON.stringify({ status: newStatus, status_changed_at: new Date().toISOString() })
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     return true;
@@ -1825,7 +1976,10 @@ async function toggleStatus(id, newStatus) {
   const ok = await updateCommentStatus(id, newStatus);
   if (ok) {
     const c = state.comments.find(x => x.id === id);
-    if (c) c.status = newStatus;
+    if (c) {
+      c.status = newStatus;
+      c.statusChangedAt = Date.now();
+    }
     renderCommentList();
     updateAllBadges();
     showToast(newStatus === 'erledigt' ? 'Als erledigt markiert ✓' : 'Wieder geöffnet');
@@ -1936,6 +2090,106 @@ function toggleMobileMenu() {
   document.querySelector('.topnav').classList.toggle('menu-open');
 }
 
+// === Option 1: Update-Banner beim Wiederkehren ===
+function checkForUpdates() {
+  if (!state.reviewerName) return;
+  const lastSeenKey = 'lou_last_seen_' + state.reviewerName.toLowerCase();
+  const lastSeen = parseInt(localStorage.getItem(lastSeenKey) || '0');
+  // Find my comments that were marked erledigt after my last visit
+  const myProcessed = state.comments.filter(c => {
+    if (c.author !== state.reviewerName) return false;
+    if (c.status !== 'erledigt') return false;
+    if (!c.statusChangedAt) return false;
+    return new Date(c.statusChangedAt).getTime() > lastSeen;
+  });
+  if (myProcessed.length > 0 && lastSeen > 0) {
+    showUpdateBanner(myProcessed);
+  } else {
+    // First visit or no updates — just set last_seen
+    localStorage.setItem(lastSeenKey, Date.now().toString());
+  }
+}
+
+function showUpdateBanner(processedComments) {
+  const banner = document.getElementById('updateBanner');
+  if (!banner) return;
+  document.getElementById('updateBannerName').textContent = state.reviewerName;
+  document.getElementById('updateBannerCount').textContent = processedComments.length;
+  // Build item list
+  const items = [...new Set(processedComments.map(c => getItemLabel(c.itemId)))];
+  const itemsEl = document.getElementById('updateBannerItems');
+  if (itemsEl) itemsEl.textContent = items.slice(0, 3).join(' · ') + (items.length > 3 ? ' · …' : '');
+  banner.style.display = 'flex';
+  // Save last seen after a short delay so they actually see the banner
+  setTimeout(() => {
+    const lastSeenKey = 'lou_last_seen_' + state.reviewerName.toLowerCase();
+    localStorage.setItem(lastSeenKey, Date.now().toString());
+  }, 4000);
+}
+
+function closeUpdateBanner() {
+  document.getElementById('updateBanner').style.display = 'none';
+  const lastSeenKey = 'lou_last_seen_' + state.reviewerName.toLowerCase();
+  localStorage.setItem(lastSeenKey, Date.now().toString());
+}
+
+// === Option 3: Update-Mail vorbereiten (Admin) ===
+function openEmailModal() {
+  const erledigt = state.comments.filter(c => c.status === 'erledigt');
+  if (erledigt.length === 0) {
+    showToast('Noch keine erledigten Kommentare zum Mitteilen');
+    return;
+  }
+  // Group by author
+  const byAuthor = {};
+  erledigt.forEach(c => {
+    if (!byAuthor[c.author]) byAuthor[c.author] = [];
+    byAuthor[c.author].push(c);
+  });
+  // Build body
+  const url = 'https://mktbey.github.io/lou-feedback/';
+  const authors = Object.keys(byAuthor);
+  const greeting = authors.length === 1 ? 'Hi ' + authors[0] : 'Hallo zusammen';
+  let body = greeting + ',\n\n' +
+    'kurzes Update zum LOU-Anzeigenkonzept — folgende Punkte aus deinem Feedback wurden in der aktuellen Version berücksichtigt:\n\n';
+  Object.entries(byAuthor).forEach(([author, comments]) => {
+    if (authors.length > 1) body += author + ':\n';
+    comments.forEach(c => {
+      const item = getItemLabel(c.itemId);
+      const txt = c.text.replace(/\s+/g, ' ').trim();
+      const preview = txt.length > 110 ? txt.slice(0, 110) + '…' : txt;
+      body += '• ' + item + '\n  «' + preview + '»\n\n';
+    });
+  });
+  body += 'Die aktualisierte Seite findest du hier:\n' + url + '\n\n' +
+    'Bei Bedarf kannst du weitere Kommentare direkt auf der Seite hinterlassen.\n\n' +
+    'Viele Grüsse,\nbeyonity Team';
+  const subject = 'LOU Anzeigenkonzept · Update zu deinem Feedback';
+  document.getElementById('emailSubject').value = subject;
+  document.getElementById('emailBody').value = body;
+  document.getElementById('emailModal').classList.add('open');
+}
+function closeEmailModal() {
+  document.getElementById('emailModal').classList.remove('open');
+}
+function sendEmailViaMailto() {
+  const subject = document.getElementById('emailSubject').value;
+  const body = document.getElementById('emailBody').value;
+  const mailto = 'mailto:?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  window.location.href = mailto;
+  setTimeout(closeEmailModal, 500);
+}
+function copyEmailToClipboard() {
+  const subject = document.getElementById('emailSubject').value;
+  const body = document.getElementById('emailBody').value;
+  const full = 'Betreff: ' + subject + '\n\n' + body;
+  navigator.clipboard.writeText(full).then(() => {
+    showToast('In Zwischenablage kopiert ✓');
+  }, () => {
+    showToast('Kopieren fehlgeschlagen');
+  });
+}
+
 function checkAdminMode() {
   try {
     const params = new URLSearchParams(location.search);
@@ -1967,6 +2221,7 @@ async function init() {
   updateReviewerLabel();
   await fetchComments();
   updateAllBadges();
+  checkForUpdates();
   document.querySelectorAll('.cmt-btn').forEach(btn => {
     btn.addEventListener('click', () => openCommentPanel(btn.dataset.id));
   });
